@@ -1,11 +1,32 @@
-import xmlparser as xp
+import xml.etree.ElementTree as ET
+import pandas as pd
 
-file=open('XML.txt')
+tree = ET.parse('Input.xml')
+root = tree.getroot()
+file = open('XML3.txt','w')
+file.truncate()
+importdata = root[1][0]
+tallymessage = importdata[1][1]
+voucher = tallymessage[0]
 
-lines=file.readlines()
+tallyArray = []
+voucherArray = []
 
-print(lines[:20])
+for tallymessage in importdata:
+    for voucher in tallymessage:
+        tallyArray.append(voucher)
+        for v in voucher:
+            voucherArray.append(v)
+        tallyArray.append(voucherArray)
 
-for i in range(20):
-    if(lines[i]=='  VOUCHER : \n'):
-        print(lines[i])
+transactionType=[]
+
+for voucherArray in tallyArray:
+    vouchers=[]
+    for voucher in voucherArray:
+        dict={}
+        for data in voucher:
+            dict.update({data.tag:data.text})
+        vouchers.append(dict)
+
+
